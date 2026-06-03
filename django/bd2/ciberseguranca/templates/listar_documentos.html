@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Documentos</div>
+        <div class="page-subtitle">Ficheiros associados a tickets</div>
+    </div>
+    <a href="/documentos/" class="btn btn-primary">+ Novo Documento</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Ficheiro</th>
+                    <th>Ticket</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for documento in documentos %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ documento.0 }}</td>
+                    <td style="font-weight:500;">{{ documento.1 }}</td>
+                    <td style="color:var(--muted);">{{ documento.2 }}</td>
+                    <td>
+                        <a href="/media/{{ documento.3 }}" class="btn btn-download">⬇ Download</a>
+                    </td>
+                    <td>{{ documento.4 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_documento' documento.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_documento' documento.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

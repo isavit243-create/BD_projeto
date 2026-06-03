@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Roles</div>
+        <div class="page-subtitle">Gestão de perfis de acesso</div>
+    </div>
+    <a href="/role/" class="btn btn-primary">+ Nova Role</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ role.0 }}</td>
+                    <td style="font-weight:500;">{{ role.1 }}</td>
+                    <td style="color:var(--muted);">{{ role.2 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_role' role.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_role' role.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Adicionar Documento</div>
+        <div class="page-subtitle">Ficheiros de suporte</div>
+    </div>
+    <a href="/documentos-lista/" class="btn btn-edit">← Voltar</a>
+</div>
+
+<div class="card">
+    <div class="form-wrap">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">Guardar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

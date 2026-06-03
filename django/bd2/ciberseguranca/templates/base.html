@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiberGestão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #0a0e1a;
+            --surface:   #111827;
+            --surface2:  #1a2235;
+            --border:    #1f2d45;
+            --accent:    #00d4ff;
+            --accent2:   #7c3aed;
+            --danger:    #ef4444;
+            --warning:   #f59e0b;
+            --success:   #10b981;
+            --text:      #e2e8f0;
+            --muted:     #64748b;
+            --sidebar-w: 240px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ─────────────────────────────── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 28px 24px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-logo .logo-mark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 2px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-section {
+            padding: 20px 12px 8px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 12px;
+            margin-bottom: 8px;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        .nav-label:first-child { margin-top: 0; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 400;
+            transition: all 0.15s;
+            margin-bottom: 2px;
+        }
+
+        .nav-link:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent);
+        }
+
+        .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* ── MAIN CONTENT ─────────────────────────── */
+        .main {
+            margin-left: var(--sidebar-w);
+            min-height: 100vh;
+            padding: 36px 40px;
+        }
+
+        /* ── PAGE HEADER ─────────────────────────── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── CARD ─────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        /* ── TABLE ─────────────────────────────────── */
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        thead th {
+            background: var(--surface2);
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        thead th:first-child { border-radius: 8px 0 0 0; }
+        thead th:last-child  { border-radius: 0 8px 0 0; }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.12s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: var(--surface2); }
+
+        tbody td {
+            padding: 13px 16px;
+            color: var(--text);
+            vertical-align: middle;
+        }
+
+        /* ── BUTTONS ─────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 7px;
+            font-size: 12.5px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0e1a;
+        }
+        .btn-primary:hover { background: #00bbdd; }
+
+        .btn-edit {
+            background: rgba(245,158,11,0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245,158,11,0.25);
+        }
+        .btn-edit:hover { background: rgba(245,158,11,0.25); }
+
+        .btn-delete {
+            background: rgba(239,68,68,0.12);
+            color: var(--danger);
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+        .btn-delete:hover { background: rgba(239,68,68,0.22); }
+
+        .btn-download {
+            background: rgba(124,58,237,0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(124,58,237,0.25);
+        }
+        .btn-download:hover { background: rgba(124,58,237,0.25); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: var(--accent);
+            color: #0a0e1a;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: 0.3px;
+            transition: all 0.15s;
+            margin-top: 8px;
+        }
+        .btn-submit:hover { background: #00bbdd; transform: translateY(-1px); }
+
+        /* ── FORM STYLES ─────────────────────────── */
+        .form-wrap {
+            max-width: 560px;
+        }
+
+        .form-wrap form p,
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-wrap label,
+        .form-group label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .form-wrap input,
+        .form-wrap textarea,
+        .form-wrap select,
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-wrap input:focus,
+        .form-wrap textarea:focus,
+        .form-wrap select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+        }
+
+        .form-wrap textarea,
+        .form-group textarea { resize: vertical; min-height: 90px; }
+
+        .form-wrap select option,
+        .form-group select option { background: var(--surface2); }
+
+        /* checkbox */
+        .form-wrap input[type="checkbox"],
+        .form-group input[type="checkbox"] {
+            width: 18px; height: 18px;
+            accent-color: var(--accent);
+        }
+
+        /* ── BADGES ─────────────────────────────── */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+        .badge-success { background: rgba(16,185,129,0.15); color: var(--success); }
+        .badge-danger  { background: rgba(239,68,68,0.15);  color: var(--danger);  }
+        .badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
+        .badge-info    { background: rgba(0,212,255,0.12);  color: var(--accent);  }
+        .badge-muted   { background: rgba(100,116,139,0.15); color: var(--muted);  }
+
+        /* ── HOME GRID ────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: block;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-icon { font-size: 24px; margin-bottom: 12px; }
+        .stat-card .stat-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .stat-card .stat-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            color: #fff;
+        }
+
+        /* ── ACTIONS CELL ─────────────────────────── */
+        .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* ── GLOWING LINE ─────────────────────────── */
+        .accent-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 2px;
+            margin-bottom: 28px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-mark">
+            <div class="logo-icon">🛡</div>
+            <div>
+                <div class="logo-text">CiberGestão</div>
+                <div class="logo-sub">Segurança NIS2</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Geral</div>
+        <a href="/" class="nav-link"><span class="nav-icon">⌂</span> Dashboard</a>
+
+        <div class="nav-label">Gestão</div>
+        <a href="/tickets-lista/" class="nav-link"><span class="nav-icon">🎫</span> Tickets</a>
+        <a href="/utilizadores-lista/" class="nav-link"><span class="nav-icon">👤</span> Utilizadores</a>
+        <a href="/organizacoes-lista/" class="nav-link"><span class="nav-icon">🏢</span> Organizações</a>
+        <a href="/categorias-lista/" class="nav-link"><span class="nav-icon">🏷</span> Categorias</a>
+        <a href="/roles/" class="nav-link"><span class="nav-icon">🔑</span> Roles</a>
+
+        <div class="nav-label">Comunicação</div>
+        <a href="/chats-lista/" class="nav-link"><span class="nav-icon">💬</span> Chats</a>
+        <a href="/lembretes-lista/" class="nav-link"><span class="nav-icon">🔔</span> Lembretes</a>
+
+        <div class="nav-label">Ficheiros & Auditoria</div>
+        <a href="/documentos-lista/" class="nav-link"><span class="nav-icon">📄</span> Documentos</a>
+        <a href="/logs-lista/" class="nav-link"><span class="nav-icon">📋</span> Logs</a>
+    </div>
+
+    <div class="sidebar-footer">
+        © BD Sistema Projeto 
+    </div>
+</nav>
+
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

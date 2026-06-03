@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Tickets</div>
+        <div class="page-subtitle">Gestão de incidentes e suporte</div>
+    </div>
+    <a href="/tickets/" class="btn btn-primary">+ Novo Ticket</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Prioridade</th>
+                    <th>Estado</th>
+                    <th>Utilizador</th>
+                    <th>Categoria</th>
+                    <th>Organização</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ ticket.0 }}</td>
+                    <td style="font-weight:500;">{{ ticket.1 }}</td>
+                    <td>
+                        {% if ticket.2 == 'Crítica' %}
+                            <span class="badge badge-danger">{{ ticket.2 }}</span>
+                        {% elif ticket.2 == 'Alta' %}
+                            <span class="badge badge-warning">{{ ticket.2 }}</span>
+                        {% elif ticket.2 == 'Média' %}
+                            <span class="badge badge-info">{{ ticket.2 }}</span>
+                        {% else %}
+                            <span class="badge badge-muted">{{ ticket.2 }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if ticket.3 == 'Resolvido' or ticket.3 == 'Fechado' %}
+                            <span class="badge badge-success">{{ ticket.3 }}</span>
+                        {% elif ticket.3 == 'Em análise' %}
+                            <span class="badge badge-info">{{ ticket.3 }}</span>
+                        {% else %}
+                            <span class="badge badge-muted">{{ ticket.3 }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ ticket.4 }}</td>
+                    <td>{{ ticket.5 }}</td>
+                    <td>{{ ticket.6 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_ticket' ticket.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_ticket' ticket.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

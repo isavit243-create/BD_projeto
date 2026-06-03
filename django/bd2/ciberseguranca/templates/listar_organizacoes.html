@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Organizações</div>
+        <div class="page-subtitle">Entidades registadas no sistema</div>
+    </div>
+    <a href="/organizacoes/" class="btn btn-primary">+ Nova Organização</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Responsável</th>
+                    <th>Contacto</th>
+                    <th>Classificação</th>
+                    <th>Estado</th>
+                    <th>NIS2</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for org in organizacoes %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ org.0 }}</td>
+                    <td style="font-weight:500;">{{ org.1 }}</td>
+                    <td>{{ org.2 }}</td>
+                    <td style="color:var(--muted);">{{ org.3 }}</td>
+                    <td><span class="badge badge-info">{{ org.4 }}</span></td>
+                    <td>
+                        {% if org.5 %}
+                            <span class="badge badge-success">Ativo</span>
+                        {% else %}
+                            <span class="badge badge-danger">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if org.6 == 'Conforme' %}
+                            <span class="badge badge-success">{{ org.6 }}</span>
+                        {% elif org.6 == 'Em avaliação' %}
+                            <span class="badge badge-warning">{{ org.6 }}</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ org.6 }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_organizacao' org.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_organizacao' org.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

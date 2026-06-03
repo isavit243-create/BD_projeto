@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+
+    <div style="max-width: 480px; width: 100%; text-align: center;">
+
+        <div style="
+            width: 72px; height: 72px;
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.25);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        ">⚠</div>
+
+        <div style="
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 12px;
+        ">
+            Não foi possível eliminar
+        </div>
+
+        <div style="
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            color: #fca5a5;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        ">
+            {{ mensagem }}
+        </div>
+
+        <a href="{{ voltar_url }}" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent, #00d4ff);
+            color: #0a0e1a;
+            padding: 11px 24px;
+            border-radius: 8px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.15s;
+        ">
+            ← {{ voltar_label }}
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

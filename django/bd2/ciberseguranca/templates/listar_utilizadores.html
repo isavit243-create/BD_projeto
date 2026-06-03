@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Utilizadores</div>
+        <div class="page-subtitle">Gestão de utilizadores do sistema</div>
+    </div>
+    <a href="/utilizadores/" class="btn btn-primary">+ Novo Utilizador</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Estado</th>
+                    <th>Role</th>
+                    <th>Organização</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for utilizador in utilizadores %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ utilizador.0 }}</td>
+                    <td style="font-weight:500;">{{ utilizador.1 }}</td>
+                    <td style="color:var(--muted);">{{ utilizador.2 }}</td>
+                    <td>
+                        {% if utilizador.3 %}
+                            <span class="badge badge-success">Ativo</span>
+                        {% else %}
+                            <span class="badge badge-danger">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ utilizador.4 }}</td>
+                    <td>{{ utilizador.5 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_utilizador' utilizador.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_utilizador' utilizador.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

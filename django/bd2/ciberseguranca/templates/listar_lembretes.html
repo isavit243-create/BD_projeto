@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Lembretes</div>
+        <div class="page-subtitle">Alertas e tarefas pendentes</div>
+    </div>
+    <a href="/lembretes/" class="btn btn-primary">+ Novo Lembrete</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Concluído</th>
+                    <th>Ticket</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lembrete in lembretes %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ lembrete.0 }}</td>
+                    <td style="font-weight:500;">{{ lembrete.1 }}</td>
+                    <td style="color:var(--muted);">{{ lembrete.2 }}</td>
+                    <td style="color:var(--muted);font-size:12px;">{{ lembrete.3 }}</td>
+                    <td>
+                        {% if lembrete.4 %}
+                            <span class="badge badge-success">✓ Sim</span>
+                        {% else %}
+                            <span class="badge badge-warning">⏳ Não</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ lembrete.5 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_lembrete' lembrete.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_lembrete' lembrete.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Editar Categoria</div>
+        <div class="page-subtitle">Atualizar categoria</div>
+    </div>
+    <a href="/categorias-lista/" class="btn btn-edit">← Voltar</a>
+</div>
+
+<div class="card">
+    <div class="form-wrap">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

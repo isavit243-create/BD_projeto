@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Logs</div>
+        <div class="page-subtitle">Registos de auditoria do sistema</div>
+    </div>
+    <a href="/logs/" class="btn btn-primary">+ Novo Registo</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ação</th>
+                    <th>Descrição</th>
+                    <th>Data/Hora</th>
+                    <th>Utilizador</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ log.0 }}</td>
+                    <td style="font-weight:500;">{{ log.1 }}</td>
+                    <td style="color:var(--muted);">{{ log.2 }}</td>
+                    <td style="color:var(--muted);font-size:12px;">{{ log.3 }}</td>
+                    <td>{{ log.4 }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_log' log.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_log' log.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

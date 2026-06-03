@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Registar Organização</div>
+        <div class="page-subtitle">Entidades do sistema</div>
+    </div>
+    <a href="/organizacoes-lista/" class="btn btn-edit">← Voltar</a>
+</div>
+
+<div class="card">
+    <div class="form-wrap">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">Guardar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

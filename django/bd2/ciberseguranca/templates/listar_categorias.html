@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Categorias</div>
+        <div class="page-subtitle">Categorias de incidentes e suporte</div>
+    </div>
+    <a href="/categorias/" class="btn btn-primary">+ Nova Categoria</a>
+</div>
+
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Estado</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td style="color:var(--muted);font-size:12px;">#{{ categoria.0 }}</td>
+                    <td style="font-weight:500;">{{ categoria.1 }}</td>
+                    <td style="color:var(--muted);">{{ categoria.2 }}</td>
+                    <td>
+                        {% if categoria.3 %}
+                            <span class="badge badge-success">Ativa</span>
+                        {% else %}
+                            <span class="badge badge-danger">Inativa</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'editar_categoria' categoria.0 %}" class="btn btn-edit">✏ Editar</a>
+                            <a href="{% url 'eliminar_categoria' categoria.0 %}" class="btn btn-delete">✕ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

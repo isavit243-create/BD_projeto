@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle">Bem-vindo ao sistema de gestão de cibersegurança</div>
+    </div>
+</div>
+
+<div class="accent-bar"></div>
+
+<div class="stats-grid">
+    <a href="/tickets-lista/" class="stat-card">
+        <div class="stat-icon">🎫</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Tickets</div>
+    </a>
+    <a href="/utilizadores-lista/" class="stat-card">
+        <div class="stat-icon">👤</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Utilizadores</div>
+    </a>
+    <a href="/organizacoes-lista/" class="stat-card">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Organizações</div>
+    </a>
+    <a href="/categorias-lista/" class="stat-card">
+        <div class="stat-icon">🏷</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Categorias</div>
+    </a>
+    <a href="/roles/" class="stat-card">
+        <div class="stat-icon">🔑</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Roles</div>
+    </a>
+    <a href="/chats-lista/" class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Chats</div>
+    </a>
+    <a href="/lembretes-lista/" class="stat-card">
+        <div class="stat-icon">🔔</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Lembretes</div>
+    </a>
+    <a href="/documentos-lista/" class="stat-card">
+        <div class="stat-icon">📄</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Documentos</div>
+    </a>
+    <a href="/logs-lista/" class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-label">Módulo</div>
+        <div class="stat-name">Logs</div>
+    </a>
+</div>
+
+<div class="card">
+    <p style="color:var(--muted); font-size:14px; line-height:1.7;">
+        Utilize o menu lateral para navegar entre os módulos. Este sistema permite gerir tickets de segurança, utilizadores, organizações e muito mais, em conformidade com a diretiva <strong style="color:var(--accent)">NIS2</strong>.
+    </p>
+</div>
+
+{% endblock %}
