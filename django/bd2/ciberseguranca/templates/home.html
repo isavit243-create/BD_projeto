@@ -4,64 +4,303 @@
 <div class="page-header">
     <div>
         <div class="page-title">Dashboard</div>
-        <div class="page-subtitle">Bem-vindo ao sistema de gestão de cibersegurança</div>
+        <div class="page-subtitle">Visão geral do sistema de cibersegurança</div>
     </div>
 </div>
 
 <div class="accent-bar"></div>
 
-<div class="stats-grid">
-    <a href="/tickets-lista/" class="stat-card">
-        <div class="stat-icon">🎫</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Tickets</div>
-    </a>
-    <a href="/utilizadores-lista/" class="stat-card">
-        <div class="stat-icon">👤</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Utilizadores</div>
-    </a>
-    <a href="/organizacoes-lista/" class="stat-card">
-        <div class="stat-icon">🏢</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Organizações</div>
-    </a>
-    <a href="/categorias-lista/" class="stat-card">
-        <div class="stat-icon">🏷</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Categorias</div>
-    </a>
-    <a href="/roles/" class="stat-card">
-        <div class="stat-icon">🔑</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Roles</div>
-    </a>
-    <a href="/chats-lista/" class="stat-card">
-        <div class="stat-icon">💬</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Chats</div>
-    </a>
-    <a href="/lembretes-lista/" class="stat-card">
-        <div class="stat-icon">🔔</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Lembretes</div>
-    </a>
-    <a href="/documentos-lista/" class="stat-card">
-        <div class="stat-icon">📄</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Documentos</div>
-    </a>
-    <a href="/logs-lista/" class="stat-card">
-        <div class="stat-icon">📋</div>
-        <div class="stat-label">Módulo</div>
-        <div class="stat-name">Logs</div>
-    </a>
+<style>
+    .dash-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    .dash-card-full { grid-column: 1 / -1; }
+    @media (max-width: 640px) {
+        .dash-grid { grid-template-columns: 1fr; }
+        .dash-card-full { grid-column: 1; }
+    }
+</style>
+
+<div class="dash-grid">
+
+    <!-- 1. NIS2 -->
+    <div class="card">
+        <div style="margin-bottom:14px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff;">
+                Clientes por Estado NIS2
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-top:3px;">
+                Distribuição das organizações por estado NIS2
+            </div>
+        </div>
+        <div style="position:relative; height:220px;">
+            <canvas id="grafico_nis2"></canvas>
+        </div>
+    </div>
+
+    <!-- 2. Top 5 incidentes -->
+    <div class="card">
+        <div style="margin-bottom:14px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff;">
+                Top 5 — Mais Incidentes
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-top:3px;">
+                Organizações com maior número de tickets
+            </div>
+        </div>
+        <div style="position:relative; height:220px;">
+            <canvas id="grafico_top5"></canvas>
+        </div>
+    </div>
+
+    <!-- 3. Utilizadores por perfil -->
+    <div class="card">
+        <div style="margin-bottom:14px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff;">
+                Utilizadores por Perfil
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-top:3px;">
+                Distribuição de utilizadores por role
+            </div>
+        </div>
+        {% if roles_labels %}
+        <div style="position:relative; height:220px;">
+            <canvas id="grafico_roles"></canvas>
+        </div>
+        {% else %}
+        <div style="display:flex; align-items:center; justify-content:center; height:120px; color:var(--muted); font-size:13px;">
+            Sem utilizadores registados ainda.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 4. Estado dos tickets -->
+    <div class="card">
+        <div style="margin-bottom:14px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff;">
+                Estado dos Tickets &amp; Tempo Médio
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-top:3px;">
+                Distribuição por estado e média de resolução
+            </div>
+        </div>
+
+        <div style="
+            display:inline-flex; align-items:center; gap:10px;
+            background:rgba(0,212,255,0.07); border:1px solid rgba(0,212,255,0.18);
+            border-radius:10px; padding:10px 16px; margin-bottom:14px;
+        ">
+            <span style="font-size:20px;">⏱</span>
+            <div>
+                <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px;">
+                    Tempo médio de resolução
+                </div>
+                <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:20px; color:var(--accent);">
+                    {% if tempo_medio %}{{ tempo_medio }}h{% else %}—{% endif %}
+                </div>
+                <div style="font-size:11px; color:var(--muted);">
+                    {% if tempo_medio %}calculado com tickets Resolvidos/Fechados{% else %}sem tickets resolvidos ainda{% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if estados_labels %}
+        <div style="position:relative; height:160px;">
+            <canvas id="grafico_estados"></canvas>
+        </div>
+        {% else %}
+        <div style="display:flex; align-items:center; justify-content:center; height:100px; color:var(--muted); font-size:13px;">
+            Sem tickets registados ainda.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 5. Documentos (largura total) -->
+    <div class="card dash-card-full">
+        <div style="margin-bottom:14px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff;">
+                Documentos Submetidos por Cliente e por Mês
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-top:3px;">
+                Evolução mensal de documentos por organização
+            </div>
+        </div>
+        {% if docs_series %}
+        <div style="position:relative; height:240px;">
+            <canvas id="grafico_docs"></canvas>
+        </div>
+        {% else %}
+        <div style="display:flex; align-items:center; justify-content:center; height:120px; color:var(--muted); font-size:13px;">
+            Sem documentos registados ainda.
+        </div>
+        {% endif %}
+    </div>
+
 </div>
 
-<div class="card">
-    <p style="color:var(--muted); font-size:14px; line-height:1.7;">
-        Utilize o menu lateral para navegar entre os módulos. Este sistema permite gerir tickets de segurança, utilizadores, organizações e muito mais, em conformidade com a diretiva <strong style="color:var(--accent)">NIS2</strong>.
-    </p>
-</div>
+
+
+{{ nis2_labels    |json_script:"d-nis2-labels" }}
+{{ nis2_valores   |json_script:"d-nis2-valores" }}
+{{ top5_labels    |json_script:"d-top5-labels" }}
+{{ top5_valores   |json_script:"d-top5-valores" }}
+{{ docs_meses     |json_script:"d-docs-meses" }}
+{{ docs_series    |json_script:"d-docs-series" }}
+{{ roles_labels   |json_script:"d-roles-labels" }}
+{{ roles_valores  |json_script:"d-roles-valores" }}
+{{ estados_labels |json_script:"d-estados-labels" }}
+{{ estados_valores|json_script:"d-estados-valores" }}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+    function jd(id) {
+        const el = document.getElementById(id);
+        return el ? JSON.parse(el.textContent) : [];
+    }
+
+    const nis2Labels     = jd('d-nis2-labels');
+    const nis2Valores    = jd('d-nis2-valores');
+    const top5Labels     = jd('d-top5-labels');
+    const top5Valores    = jd('d-top5-valores');
+    const docsMeses      = jd('d-docs-meses');
+    const docsSeries     = jd('d-docs-series');
+    const rolesLabels    = jd('d-roles-labels');
+    const rolesValores   = jd('d-roles-valores');
+    const estadosLabels  = jd('d-estados-labels');
+    const estadosValores = jd('d-estados-valores');
+
+    /* ── Gráfico 1: NIS2 ── */
+    const cores = {
+        'Conforme':       { bg: 'rgba(16,185,129,0.25)',  border: '#10b981' },
+        'Em avaliação':   { bg: 'rgba(245,158,11,0.25)',  border: '#f59e0b' },
+        'Com pendências': { bg: 'rgba(239,68,68,0.25)',   border: '#ef4444' },
+    };
+    new Chart(document.getElementById('grafico_nis2'), {
+        type: 'bar',
+        data: {
+            labels: nis2Labels,
+            datasets: [{
+                label: 'Nº de Organizações',
+                data: nis2Valores,
+                backgroundColor: nis2Labels.map(l => (cores[l] || { bg: 'rgba(100,116,139,0.25)' }).bg),
+                borderColor:     nis2Labels.map(l => (cores[l] || { border: '#64748b' }).border),
+                borderWidth: 2, borderRadius: 5,
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 } }, grid: { color: '#1f2d45' } },
+                y: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, stepSize: 1, precision: 0 }, grid: { color: '#1f2d45' }, beginAtZero: true }
+            }
+        }
+    });
+
+    /* ── Gráfico 2: Top 5 ── */
+    new Chart(document.getElementById('grafico_top5'), {
+        type: 'bar',
+        data: {
+            labels: top5Labels,
+            datasets: [{
+                label: 'Nº de Tickets', data: top5Valores,
+                backgroundColor: 'rgba(0,212,255,0.2)', borderColor: '#00d4ff',
+                borderWidth: 2, borderRadius: 5,
+            }]
+        },
+        options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, stepSize: 1, precision: 0 }, grid: { color: '#1f2d45' }, beginAtZero: true },
+                y: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 } }, grid: { color: '#1f2d45' } }
+            }
+        }
+    });
+
+    /* ── Gráfico 3: Documentos ── */
+    if (docsSeries.length > 0) {
+        const paletaCores = [
+            { bg: 'rgba(0,212,255,0.15)',  border: '#00d4ff' },
+            { bg: 'rgba(124,58,237,0.15)', border: '#7c3aed' },
+            { bg: 'rgba(16,185,129,0.15)', border: '#10b981' },
+            { bg: 'rgba(245,158,11,0.15)', border: '#f59e0b' },
+            { bg: 'rgba(239,68,68,0.15)',  border: '#ef4444' },
+            { bg: 'rgba(99,102,241,0.15)', border: '#6366f1' },
+        ];
+        new Chart(document.getElementById('grafico_docs'), {
+            type: 'line',
+            data: {
+                labels: docsMeses,
+                datasets: docsSeries.map((serie, i) => {
+                    const cor = paletaCores[i % paletaCores.length];
+                    return {
+                        label: serie.label, data: serie.data,
+                        backgroundColor: cor.bg, borderColor: cor.border,
+                        borderWidth: 2, pointRadius: 3, pointHoverRadius: 5,
+                        tension: 0.3, fill: false
+                    };
+                })
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: true, labels: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, boxWidth: 10, padding: 12 } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 } }, grid: { color: '#1f2d45' } },
+                    y: { ticks: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, stepSize: 1, precision: 0 }, grid: { color: '#1f2d45' }, beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    /* ── Gráfico 4: Perfis ── */
+    if (rolesLabels.length > 0) {
+        const rolesCores = ['#00d4ff','#7c3aed','#10b981','#f59e0b','#ef4444','#6366f1'];
+        new Chart(document.getElementById('grafico_roles'), {
+            type: 'doughnut',
+            data: {
+                labels: rolesLabels,
+                datasets: [{
+                    data: rolesValores,
+                    backgroundColor: rolesCores.slice(0, rolesLabels.length).map(c => c + '55'),
+                    borderColor: rolesCores.slice(0, rolesLabels.length),
+                    borderWidth: 2, hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '62%',
+                plugins: { legend: { display: true, position: 'right', labels: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, boxWidth: 10, padding: 12 } } }
+            }
+        });
+    }
+
+    /* ── Gráfico 5: Estados ── */
+    if (estadosLabels.length > 0) {
+        const estadosCores = {
+            'Aberto':     { bg: 'rgba(100,116,139,0.3)',  border: '#64748b' },
+            'Em análise': { bg: 'rgba(0,212,255,0.25)',   border: '#00d4ff' },
+            'Resolvido':  { bg: 'rgba(16,185,129,0.25)',  border: '#10b981' },
+            'Fechado':    { bg: 'rgba(124,58,237,0.25)',  border: '#7c3aed' },
+        };
+        new Chart(document.getElementById('grafico_estados'), {
+            type: 'doughnut',
+            data: {
+                labels: estadosLabels,
+                datasets: [{
+                    data: estadosValores,
+                    backgroundColor: estadosLabels.map(l => (estadosCores[l] || { bg: 'rgba(100,116,139,0.25)' }).bg),
+                    borderColor:     estadosLabels.map(l => (estadosCores[l] || { border: '#64748b' }).border),
+                    borderWidth: 2, hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '62%',
+                plugins: { legend: { display: true, position: 'right', labels: { color: '#94a3b8', font: { family: 'DM Sans', size: 11 }, boxWidth: 10, padding: 10 } } }
+            }
+        });
+    }
+</script>
 
 {% endblock %}

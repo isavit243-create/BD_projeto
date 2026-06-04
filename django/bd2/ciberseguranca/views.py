@@ -26,7 +26,7 @@ def criar_role(request):
 
             inserir_role(nome, descricao)
 
-            return redirect('criar_role')
+            return redirect('listar_roles')
 
     else:
 
@@ -68,7 +68,7 @@ def criar_organizacao(request):
                 estado
             )
 
-            return redirect('criar_organizacao')
+            return redirect('listar_organizacoes')
 
     else:
 
@@ -112,7 +112,7 @@ def criar_utilizador(request):
                 organizacao.id
             )
 
-            return redirect('criar_utilizador')
+            return redirect('listar_utilizadores')
 
     else:
 
@@ -147,7 +147,7 @@ def criar_categoria(request):
                 ativo
             )
 
-            return redirect('criar_categoria')
+            return redirect('listar_categorias')
 
     else:
 
@@ -195,7 +195,7 @@ def criar_ticket(request):
                 organizacao.id
             )
 
-            return redirect('criar_ticket')
+            return redirect('listar_tickets')
 
     else:
 
@@ -209,7 +209,6 @@ def criar_ticket(request):
 
 
 from .forms import DocumentosForm
-from django.core.files.storage import default_storage
 
 def criar_documento(request):
 
@@ -230,20 +229,14 @@ def criar_documento(request):
 
             ticket = form.cleaned_data['ticket']
 
-            # Guardar o ficheiro fisicamente em media/documentos/
-            caminho = default_storage.save(
-                'documentos/' + ficheiro.name,
-                ficheiro
-            )
-
             inserir_documento(
                 nome,
                 descricao,
-                caminho,
+                str(ficheiro),
                 ticket.id
             )
 
-            return redirect('criar_documento')
+            return redirect('listar_documentos')
 
     else:
 
@@ -278,7 +271,7 @@ def criar_chat(request):
                 ticket.id
             )
 
-            return redirect('criar_chat')
+            return redirect('listar_chats')
 
     else:
 
@@ -319,7 +312,7 @@ def criar_lembrete(request):
                 ticket.id
             )
 
-            return redirect('criar_lembrete')
+            return redirect('listar_lembretes')
 
     else:
 
@@ -357,7 +350,7 @@ def criar_log(request):
                 ticket.id
             )
 
-            return redirect('criar_log')
+            return redirect('listar_logs')
 
     else:
 
@@ -469,7 +462,7 @@ def editar_ticket_view(request, id):
 
     if request.method == 'POST':
 
-        form = TicketsForm(request.POST)
+        form = TicketsForm(request.POST, instance=ticket)
 
         if form.is_valid():
 
@@ -487,6 +480,16 @@ def editar_ticket_view(request, id):
 
             organizacao = form.cleaned_data['organizacao']
 
+            from django.utils import timezone
+
+            # Preenche data_fecho automaticamente quando o ticket é resolvido ou fechado
+            if estado in ('Resolvido', 'Fechado') and not ticket.data_fecho:
+                data_fecho = timezone.now()
+            elif estado not in ('Resolvido', 'Fechado'):
+                data_fecho = None
+            else:
+                data_fecho = ticket.data_fecho
+
             atualizar_ticket(
                 id,
                 titulo,
@@ -495,7 +498,8 @@ def editar_ticket_view(request, id):
                 estado,
                 utilizador.id,
                 categoria.id,
-                organizacao.id
+                organizacao.id,
+                data_fecho
             )
 
             return redirect('listar_tickets')
@@ -515,9 +519,58 @@ def editar_ticket_view(request, id):
 
 def home(request):
 
+    nis2 = dashboard_nis2()
+    nis2_labels  = [row[0] for row in nis2]
+    nis2_valores = [row[1] for row in nis2]
+
+    top5 = dashboard_top5_incidentes()
+    top5_labels  = [row[0] for row in top5]
+    top5_valores = [row[1] for row in top5]
+
+    # Pivota os dados de documentos: meses no eixo X, uma série por cliente
+    docs_raw = dashboard_documentos_por_mes()
+
+    docs_meses = sorted(set(row[1] for row in docs_raw))
+    docs_clientes = sorted(set(row[0] for row in docs_raw))
+
+    # lookup: {(cliente, mes): total}
+    docs_lookup = {(row[0], row[1]): row[2] for row in docs_raw}
+
+    # Uma lista de valores por cliente, alinhada com docs_meses
+    docs_series = [
+        {
+            'label': cliente,
+            'data': [docs_lookup.get((cliente, mes), 0) for mes in docs_meses]
+        }
+        for cliente in docs_clientes
+    ]
+
+    roles = dashboard_utilizadores_por_role()
+    roles_labels  = [row[0] for row in roles]
+    roles_valores = [row[1] for row in roles]
+
+    estados = dashboard_estado_tickets()
+    estados_labels  = [row[0] for row in estados]
+    estados_valores = [row[1] for row in estados]
+
+    tempo_medio = dashboard_tempo_medio_resolucao()
+
     return render(
         request,
-        'home.html'
+        'home.html',
+        {
+            'nis2_labels':      nis2_labels,
+            'nis2_valores':     nis2_valores,
+            'top5_labels':      top5_labels,
+            'top5_valores':     top5_valores,
+            'docs_meses':       docs_meses,
+            'docs_series':      docs_series,
+            'roles_labels':     roles_labels,
+            'roles_valores':    roles_valores,
+            'estados_labels':   estados_labels,
+            'estados_valores':  estados_valores,
+            'tempo_medio':      tempo_medio,
+        }
     )
 
 
@@ -561,7 +614,7 @@ def editar_utilizador_view(request, id):
 
     if request.method == 'POST':
 
-        form = UtilizadoresForm(request.POST)
+        form = UtilizadoresForm(request.POST, instance=utilizador)
 
         if form.is_valid():
 
@@ -641,7 +694,7 @@ def editar_organizacao_view(request, id):
 
     if request.method == 'POST':
 
-        form = OrganizacoesForm(request.POST)
+        form = OrganizacoesForm(request.POST, instance=organizacao)
 
         if form.is_valid():
 
@@ -722,7 +775,7 @@ def editar_categoria_view(request, id):
 
     if request.method == 'POST':
 
-        form = CategoriasForm(request.POST)
+        form = CategoriasForm(request.POST, instance=categoria)
 
         if form.is_valid():
 
@@ -797,7 +850,8 @@ def editar_documento_view(request, id):
 
         form = DocumentosForm(
             request.POST,
-            request.FILES
+            request.FILES,
+            instance=documento
         )
 
         if form.is_valid():
@@ -810,20 +864,11 @@ def editar_documento_view(request, id):
 
             ticket = form.cleaned_data['ticket']
 
-            # Se foi enviado um novo ficheiro, guardar fisicamente
-            if ficheiro and hasattr(ficheiro, 'name'):
-                caminho = default_storage.save(
-                    'documentos/' + ficheiro.name,
-                    ficheiro
-                )
-            else:
-                caminho = documento.ficheiro.name if documento.ficheiro else ''
-
             atualizar_documento(
                 id,
                 nome,
                 descricao,
-                caminho,
+                str(ficheiro),
                 ticket.id
             )
 
@@ -882,7 +927,7 @@ def editar_chat_view(request, id):
 
     if request.method == 'POST':
 
-        form = ChatsForm(request.POST)
+        form = ChatsForm(request.POST, instance=chat)
 
         if form.is_valid():
 
@@ -954,7 +999,7 @@ def editar_lembrete_view(request, id):
 
     if request.method == 'POST':
 
-        form = LembretesForm(request.POST)
+        form = LembretesForm(request.POST, instance=lembrete)
 
         if form.is_valid():
 
@@ -1056,12 +1101,14 @@ def editar_log_view(request, id):
 
     else:
 
+        from .models import Utilizadores, Tickets
+
         form = RegistosLogsForm(initial={
 
             'acao': log[1],
             'descricao': log[2],
-            'utilizador': log[4],
-            'ticket': log[5]
+            'utilizador': Utilizadores.objects.get(id=log[4]),
+            'ticket': Tickets.objects.get(id=log[5])
 
         })
 

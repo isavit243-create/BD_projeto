@@ -95,9 +95,14 @@ class Tickets(models.Model):
 
     titulo = models.CharField(max_length=150)
 
-    descricao_suporte = models.TextField()
+    descricao_suporte = models.TextField(db_column='descricao')
 
     data_abertura = models.DateTimeField(auto_now_add=True)
+
+    data_fecho = models.DateTimeField(
+        null=True,
+        blank=True
+    )
 
     prioridade = models.CharField(
         max_length=20,

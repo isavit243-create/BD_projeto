@@ -36,11 +36,14 @@ def inserir_role(nome, descricao):
 
     cursor.execute(sql, (nome, descricao))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_organizacao(
@@ -79,11 +82,14 @@ def inserir_organizacao(
         estado
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_utilizador(
@@ -122,11 +128,14 @@ def inserir_utilizador(
         organizacao_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_categoria(
@@ -158,11 +167,14 @@ def inserir_categoria(
         ativo
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_ticket(
@@ -183,7 +195,7 @@ def inserir_ticket(
         INSERT INTO ciberseguranca_tickets
         (
             titulo,
-            descricao_suporte,
+            descricao,
             prioridade,
             estado_resolucao,
             utilizador_id,
@@ -206,11 +218,14 @@ def inserir_ticket(
         organizacao_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_documento(
@@ -244,11 +259,14 @@ def inserir_documento(
         ticket_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_chat(
@@ -279,11 +297,14 @@ def inserir_chat(
         ticket_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_lembrete(
@@ -319,11 +340,14 @@ def inserir_lembrete(
         ticket_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def inserir_log(
@@ -357,11 +381,14 @@ def inserir_log(
         ticket_id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_roles():
@@ -379,11 +406,11 @@ def listar_roles():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_role(id):
@@ -399,11 +426,14 @@ def eliminar_role(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def obter_role(id):
@@ -422,11 +452,11 @@ def obter_role(id):
 
     dados = cursor.fetchone()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_role(id, nome, descricao):
@@ -451,11 +481,14 @@ def atualizar_role(id, nome, descricao):
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_tickets():
@@ -492,11 +525,11 @@ def listar_tickets():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_ticket(id):
@@ -512,11 +545,14 @@ def eliminar_ticket(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def obter_ticket(id):
@@ -535,11 +571,11 @@ def obter_ticket(id):
 
     dados = cursor.fetchone()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_ticket(
@@ -550,7 +586,8 @@ def atualizar_ticket(
     estado,
     utilizador_id,
     categoria_id,
-    organizacao_id
+    organizacao_id,
+    data_fecho=None
 ):
 
     ligacao = ligar_bd()
@@ -562,12 +599,13 @@ def atualizar_ticket(
 
         SET
             titulo = %s,
-            descricao_suporte = %s,
+            descricao = %s,
             prioridade = %s,
             estado_resolucao = %s,
             utilizador_id = %s,
             categoria_id = %s,
-            organizacao_id = %s
+            organizacao_id = %s,
+            data_fecho = %s
 
         WHERE id = %s
     """
@@ -580,14 +618,18 @@ def atualizar_ticket(
         utilizador_id,
         categoria_id,
         organizacao_id,
+        data_fecho,
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_utilizadores():
@@ -620,11 +662,11 @@ def listar_utilizadores():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_utilizador(id):
@@ -640,11 +682,14 @@ def eliminar_utilizador(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_utilizador(
@@ -685,11 +730,14 @@ def atualizar_utilizador(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_organizacoes():
@@ -717,11 +765,11 @@ def listar_organizacoes():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_organizacao(id):
@@ -737,11 +785,14 @@ def eliminar_organizacao(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_organizacao(
@@ -782,11 +833,14 @@ def atualizar_organizacao(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_categorias():
@@ -811,11 +865,11 @@ def listar_categorias():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_categoria(id):
@@ -831,11 +885,14 @@ def eliminar_categoria(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_categoria(
@@ -867,11 +924,14 @@ def atualizar_categoria(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_documentos():
@@ -900,11 +960,11 @@ def listar_documentos():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_documento(id):
@@ -920,11 +980,14 @@ def eliminar_documento(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_documento(
@@ -959,11 +1022,14 @@ def atualizar_documento(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_chats():
@@ -995,11 +1061,11 @@ def listar_chats():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 def eliminar_chat(id):
 
@@ -1014,11 +1080,14 @@ def eliminar_chat(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 def atualizar_chat(
     id,
@@ -1049,11 +1118,14 @@ def atualizar_chat(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_lembretes():
@@ -1082,11 +1154,11 @@ def listar_lembretes():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def eliminar_lembrete(id):
@@ -1102,11 +1174,14 @@ def eliminar_lembrete(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_lembrete(
@@ -1144,11 +1219,14 @@ def atualizar_lembrete(
         id
     ))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def listar_logs():
@@ -1177,11 +1255,11 @@ def listar_logs():
 
     dados = cursor.fetchall()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def obter_log(id):
@@ -1200,11 +1278,11 @@ def obter_log(id):
 
     dados = cursor.fetchone()
 
-    cursor.close()
-
-    ligacao.close()
-
-    return dados
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
     
 
 def eliminar_log(id):
@@ -1220,11 +1298,14 @@ def eliminar_log(id):
 
     cursor.execute(sql, (id,))
 
-    ligacao.commit()
-
-    cursor.close()
-
-    ligacao.close()
+    try:
+        ligacao.commit()
+    except Exception:
+        ligacao.rollback()
+        raise
+    finally:
+        cursor.close()
+        ligacao.close()
 
 
 def atualizar_log(id, acao, descricao, utilizador_id, ticket_id):
@@ -1258,3 +1339,195 @@ def atualizar_log(id, acao, descricao, utilizador_id, ticket_id):
     cursor.close()
 
     ligacao.close()
+
+def dashboard_nis2():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            estado_nis2,
+            COUNT(*) AS total
+
+        FROM ciberseguranca_organizacoes
+
+        GROUP BY estado_nis2
+
+        ORDER BY estado_nis2
+    """
+
+    cursor.execute(sql)
+
+    dados = cursor.fetchall()
+
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
+
+
+def dashboard_top5_incidentes():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            o.nome,
+            COUNT(t.id) AS total_tickets
+
+        FROM ciberseguranca_organizacoes o
+
+        INNER JOIN ciberseguranca_tickets t
+            ON t.organizacao_id = o.id
+
+        GROUP BY o.id, o.nome
+
+        ORDER BY total_tickets DESC
+
+        LIMIT 5
+    """
+
+    cursor.execute(sql)
+
+    dados = cursor.fetchall()
+
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
+
+
+def dashboard_documentos_por_mes():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            o.nome                                          AS cliente,
+            TO_CHAR(d.data_upload, 'YYYY-MM')              AS mes,
+            COUNT(d.id)                                     AS total
+
+        FROM ciberseguranca_documentos d
+
+        INNER JOIN ciberseguranca_tickets t
+            ON d.ticket_id = t.id
+
+        INNER JOIN ciberseguranca_organizacoes o
+            ON t.organizacao_id = o.id
+
+        GROUP BY o.nome, TO_CHAR(d.data_upload, 'YYYY-MM')
+
+        ORDER BY mes, o.nome
+    """
+
+    cursor.execute(sql)
+
+    dados = cursor.fetchall()
+
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
+
+
+def dashboard_utilizadores_por_role():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            r.nome      AS perfil,
+            COUNT(u.id) AS total
+
+        FROM ciberseguranca_role r
+
+        LEFT JOIN ciberseguranca_utilizadores u
+            ON u.role_id = r.id
+
+        GROUP BY r.id, r.nome
+
+        ORDER BY total DESC
+    """
+
+    cursor.execute(sql)
+
+    dados = cursor.fetchall()
+
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
+
+
+def dashboard_estado_tickets():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            estado_resolucao,
+            COUNT(*) AS total
+
+        FROM ciberseguranca_tickets
+
+        GROUP BY estado_resolucao
+
+        ORDER BY total DESC
+    """
+
+    cursor.execute(sql)
+
+    dados = cursor.fetchall()
+
+    try:
+        return dados
+    finally:
+        cursor.close()
+        ligacao.close()
+
+
+def dashboard_tempo_medio_resolucao():
+
+    ligacao = ligar_bd()
+
+    cursor = ligacao.cursor()
+
+    sql = """
+        SELECT
+            ROUND(
+                AVG(
+                    EXTRACT(EPOCH FROM (data_fecho - data_abertura)) / 3600
+                )::numeric,
+                1
+            ) AS media_horas
+
+        FROM ciberseguranca_tickets
+
+        WHERE
+            data_fecho IS NOT NULL
+            AND estado_resolucao IN ('Resolvido', 'Fechado')
+    """
+
+    cursor.execute(sql)
+
+    resultado = cursor.fetchone()
+
+    try:
+        return resultado[0] if resultado and resultado[0] is not None else None
+    finally:
+        cursor.close()
+        ligacao.close()
