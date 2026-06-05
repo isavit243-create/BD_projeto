@@ -1120,3 +1120,8 @@ def editar_log_view(request, id):
         'editar_log.html',
         {'form': form}
     )
+
+
+def modelo_logico_view(request):
+
+    return render(request, 'modelo_logico.html')

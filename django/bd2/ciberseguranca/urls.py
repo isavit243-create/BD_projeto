@@ -99,6 +99,12 @@ urlpatterns = [
     path('', views.home, name='home'),
 
     path(
+        'modelo-logico/',
+        views.modelo_logico_view,
+        name='modelo_logico'
+    ),
+
+    path(
         'utilizadores-lista/',
         views.listar_utilizadores_view,
         name='listar_utilizadores'

@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Modelo Lógico</div>
+        <div class="page-subtitle">Diagrama entidade-relação da base de dados — Neon PostgreSQL</div>
+    </div>
+    <a href="/" class="btn btn-edit">← Voltar ao Dashboard</a>
+</div>
+
+<div class="accent-bar"></div>
+
+<style>
+    .mermaid-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 32px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+    }
+
+    .mermaid-card svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Override mermaid default white background */
+    .mermaid-card .mermaid { background: transparent !important; }
+
+    .legend {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .tables-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .table-pill {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 18px;
+    }
+
+    .table-pill-name {
+        font-family: 'DM Mono', monospace;
+        font-size: 12.5px;
+        color: var(--accent);
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid rgba(0, 212, 255, 0.15);
+        border-radius: 5px;
+        padding: 2px 8px;
+        display: inline-block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    .table-pill-cols {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 4px;
+    }
+
+    .table-pill-desc {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    #mermaid-container {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #mermaid-container.loaded {
+        display: block;
+    }
+
+    .loading-msg {
+        color: var(--muted);
+        font-size: 13px;
+    }
+</style>
+
+<div class="mermaid-card">
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#00d4ff;"></div>
+            PK — Chave Primária
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#f59e0b;"></div>
+            FK — Chave Estrangeira
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#10b981;"></div>
+            Relação 1 para N
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background:#7c3aed;"></div>
+            Relação opcional (0 ou N)
+        </div>
+    </div>
+
+    <div id="mermaid-container">
+        <span class="loading-msg">A carregar diagrama…</span>
+    </div>
+
+</div>
+
+<h5 style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:#fff; margin-bottom:14px;">
+    Resumo das Tabelas
+</h5>
+
+<div class="tables-grid">
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_role</div>
+        <div class="table-pill-cols">3 colunas</div>
+        <div class="table-pill-desc">Perfis de acesso dos utilizadores</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_organizacoes</div>
+        <div class="table-pill-cols">7 colunas</div>
+        <div class="table-pill-desc">Organizações clientes e estado NIS2</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_utilizadores</div>
+        <div class="table-pill-cols">7 colunas</div>
+        <div class="table-pill-desc">Utilizadores do sistema com role e organização</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_categorias</div>
+        <div class="table-pill-cols">4 colunas</div>
+        <div class="table-pill-desc">Categorias de classificação de tickets</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_tickets</div>
+        <div class="table-pill-cols">10 colunas</div>
+        <div class="table-pill-desc">Tickets de suporte e incidentes de segurança</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_documentos</div>
+        <div class="table-pill-cols">6 colunas</div>
+        <div class="table-pill-desc">Ficheiros e documentos associados a tickets</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_chats</div>
+        <div class="table-pill-cols">5 colunas</div>
+        <div class="table-pill-desc">Mensagens de chat por ticket</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_lembretes</div>
+        <div class="table-pill-cols">6 colunas</div>
+        <div class="table-pill-desc">Lembretes e alertas associados a tickets</div>
+    </div>
+    <div class="table-pill">
+        <div class="table-pill-name">ciberseguranca_registos_logs</div>
+        <div class="table-pill-cols">6 colunas</div>
+        <div class="table-pill-desc">Auditoria de ações dos utilizadores</div>
+    </div>
+</div>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables: {
+            background:          '#111827',
+            mainBkg:             '#1a2235',
+            nodeBorder:          '#00d4ff',
+            lineColor:           '#64748b',
+            primaryColor:        '#1a2235',
+            primaryTextColor:    '#e2e8f0',
+            primaryBorderColor:  '#00d4ff',
+            secondaryColor:      '#0a0e1a',
+            tertiaryColor:       '#111827',
+            edgeLabelBackground: '#111827',
+            fontFamily:          'DM Sans, system-ui, sans-serif',
+            fontSize:            '12px',
+            attributeBackgroundColorEven: '#111827',
+            attributeBackgroundColorOdd:  '#1a2235',
+        },
+        er: {
+            diagramPadding: 30,
+            layoutDirection: 'TB',
+            minEntityWidth: 100,
+            minEntityHeight: 75,
+            entityPadding: 14,
+            useMaxWidth: true,
+        },
+    });
+
+    const diagram = `
+erDiagram
+    Role {
+        int id PK
+        varchar nome
+        text descricao
+    }
+    Organizacoes {
+        int id PK
+        varchar nome
+        varchar responsavel_seguranca
+        varchar contacto_emergencia
+        int classificacao_seguranca
+        boolean ativo
+        varchar estado_nis2
+    }
+    Utilizadores {
+        int id PK
+        varchar nome
+        varchar email
+        varchar password
+        boolean ativo
+        int role_id FK
+        int organizacao_id FK
+    }
+    Categorias {
+        int id PK
+        varchar nome
+        text descricao
+        boolean ativo
+    }
+    Tickets {
+        int id PK
+        varchar titulo
+        text descricao
+        datetime data_abertura
+        datetime data_fecho
+        varchar prioridade
+        varchar estado_resolucao
+        int utilizador_id FK
+        int categoria_id FK
+        int organizacao_id FK
+    }
+    Documentos {
+        int id PK
+        varchar nome_documento
+        text descricao
+        varchar ficheiro
+        datetime data_upload
+        int ticket_id FK
+    }
+    Chats {
+        int id PK
+        text mensagem
+        datetime data_mensagem
+        int utilizador_id FK
+        int ticket_id FK
+    }
+    Lembretes {
+        int id PK
+        varchar titulo
+        text descricao
+        datetime data_lembrete
+        boolean concluido
+        int ticket_id FK
+    }
+    Registos_Logs {
+        int id PK
+        varchar acao
+        text descricao
+        datetime data_registo
+        int utilizador_id FK
+        int ticket_id FK
+    }
+
+    Role ||--o{ Utilizadores : "role_id"
+    Organizacoes ||--o{ Utilizadores : "organizacao_id"
+    Organizacoes ||--o{ Tickets : "organizacao_id"
+    Utilizadores ||--o{ Tickets : "utilizador_id"
+    Categorias ||--o{ Tickets : "categoria_id"
+    Tickets ||--o{ Documentos : "ticket_id"
+    Tickets ||--o{ Chats : "ticket_id"
+    Tickets ||--o{ Lembretes : "ticket_id"
+    Tickets ||--o{ Registos_Logs : "ticket_id"
+    Utilizadores ||--o{ Chats : "utilizador_id"
+    Utilizadores ||--o{ Registos_Logs : "utilizador_id"
+`;
+
+    const container = document.getElementById('mermaid-container');
+    try {
+        const { svg } = await mermaid.render('erd-diagram', diagram);
+        container.innerHTML = svg;
+        container.classList.add('loaded');
+        const svgEl = container.querySelector('svg');
+        if (svgEl) {
+            svgEl.style.width = '100%';
+            svgEl.style.height = 'auto';
+        }
+    } catch (e) {
+        container.innerHTML = `<div style="color:var(--danger);font-size:13px;">Erro ao renderizar diagrama: ${e.message}</div>`;
+    }
+</script>
+
+{% endblock %}
