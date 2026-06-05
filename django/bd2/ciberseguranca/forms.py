@@ -75,8 +75,22 @@ class TicketsForm(forms.ModelForm):
 
 
 from .models import Documentos
+from django.utils import timezone
 
 class DocumentosForm(forms.ModelForm):
+
+    data_upload = forms.DateTimeField(
+        label='Data de upload',
+        initial=timezone.now,
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'class': 'form-control',
+            },
+            format='%Y-%m-%dT%H:%M',
+        ),
+        input_formats=['%Y-%m-%dT%H:%M'],
+    )
 
     class Meta:
 
@@ -86,6 +100,7 @@ class DocumentosForm(forms.ModelForm):
             'nome_documento',
             'descricao',
             'ficheiro',
+            'data_upload',
             'ticket'
         ]
 

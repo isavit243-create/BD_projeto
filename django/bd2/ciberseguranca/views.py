@@ -229,11 +229,14 @@ def criar_documento(request):
 
             ticket = form.cleaned_data['ticket']
 
+            data_upload = form.cleaned_data['data_upload']
+
             inserir_documento(
                 nome,
                 descricao,
                 str(ficheiro),
-                ticket.id
+                ticket.id,
+                data_upload
             )
 
             return redirect('listar_documentos')

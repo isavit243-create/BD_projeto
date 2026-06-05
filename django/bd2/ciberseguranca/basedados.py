@@ -232,8 +232,13 @@ def inserir_documento(
     nome,
     descricao,
     ficheiro,
-    ticket_id
+    ticket_id,
+    data_upload=None
 ):
+
+    from django.utils import timezone
+    if data_upload is None:
+        data_upload = timezone.now()
 
     ligacao = ligar_bd()
 
@@ -249,14 +254,15 @@ def inserir_documento(
             data_upload
         )
 
-        VALUES (%s, %s, %s, %s, NOW())
+        VALUES (%s, %s, %s, %s, %s)
     """
 
     cursor.execute(sql, (
         nome,
         descricao,
         ficheiro,
-        ticket_id
+        ticket_id,
+        data_upload
     ))
 
     try:

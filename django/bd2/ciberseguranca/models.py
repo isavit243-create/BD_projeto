@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Role(models.Model):
@@ -144,7 +145,7 @@ class Documentos(models.Model):
     )
 
     data_upload = models.DateTimeField(
-        auto_now_add=True
+        default=timezone.now
     )
 
     ticket = models.ForeignKey(
